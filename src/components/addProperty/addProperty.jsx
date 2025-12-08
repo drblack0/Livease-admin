@@ -6,6 +6,7 @@ import {
   getPropertyByID,
   updatePropertyStatus,
   uploadDocs,
+  getUsersList,
 } from "../../server";
 import {
   prepareProfilePayload,
@@ -90,7 +91,7 @@ const FileUpload = ({ accountType, onUpload, uploaded }) => (
       onChange={(e) => onUpload(e.target.files[0])}
     />
     <label htmlFor="document-upload" className="upload-btn">
-      {accountType === "landlord"
+      {accountType === "landlord" || accountType === "admin"
         ? "Upload Property Bill/Document"
         : "Upload ID Proof"}{" "}
       <i>{uploadIcon()}</i>
@@ -113,6 +114,10 @@ const DetailsComponent = () => {
 
   // Minimal local user state to preserve tenant vs landlord UI branching.
   const [user] = useState(() => {
+    // Check for admin first
+    if (localStorage.getItem("adminEmail")) {
+      return { account_type: "admin" };
+    }
     // normalize incoming type query param to match utils expectations ("Landlord"/"Tenant")
     const normalized = type
       ? type.toLowerCase() === "landlord"
@@ -123,6 +128,8 @@ const DetailsComponent = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [touchedFields, setTouchedFields] = useState({});
+  const [landlords, setLandlords] = useState([]);
+  const [selectedLandlord, setSelectedLandlord] = useState("");
 
   const navigate = useNavigate();
 
@@ -147,6 +154,7 @@ const DetailsComponent = () => {
     aiSuggestion: [],
     property_type: "",
     is_primary: false,
+    is_deleted: false,
   });
 
   /* ---------- Simple UI handlers (no side-effects) ---------- */
@@ -221,6 +229,24 @@ const DetailsComponent = () => {
     setTouchedFields((prev) => ({ ...prev, [field]: true }));
   };
 
+  // Fetch landlords if user is admin
+  useEffect(() => {
+    if (user.account_type === "admin") {
+      const fetchLandlords = async () => {
+        try {
+          // Fetch landlords, assuming pagination to get many or modify limit as needed
+          const res = await getUsersList(1, 100, "Landlord");
+          if (res?.users) {
+            setLandlords(res.users);
+          }
+        } catch (err) {
+          console.error("Failed to fetch landlords", err);
+        }
+      };
+      fetchLandlords();
+    }
+  }, [user.account_type]);
+
   // If this page is opened in edit mode (action=edit), fetch the property
   // and prefill the form with API response values.
   useEffect(() => {
@@ -267,6 +293,10 @@ const DetailsComponent = () => {
         });
 
         setFormData((prev) => ({ ...prev, ...mapApiToForm(res) }));
+        if (res.landlord && user.account_type === "admin") {
+          setSelectedLandlord(res.landlord);
+        }
+
       } catch (err) {
         console.error("Failed to prefill property for edit", err);
       }
@@ -276,7 +306,8 @@ const DetailsComponent = () => {
     return () => {
       mounted = false;
     };
-  }, [action, propertyId]);
+  }, [action, propertyId, user.account_type]);
+
   const handleSave = async () => {
     // Call the API to add property. Show basic success / failure feedback and
     // navigate back to profile/dashboard on success.
@@ -284,8 +315,10 @@ const DetailsComponent = () => {
       setIsLoading(true);
       // Build payload using shared prepareProfilePayload helper so field names
       // and types match server expectations.
+      // If admin, treat as landlord for payload structure purposes
       const accountTypeForPayload =
-        user.account_type && user.account_type.toLowerCase() === "landlord"
+        user.account_type === "admin" ||
+        (user.account_type && user.account_type.toLowerCase() === "landlord")
           ? "landlord"
           : "tenant";
       const payload = prepareProfilePayload(formData, accountTypeForPayload);
@@ -294,6 +327,10 @@ const DetailsComponent = () => {
       // include the landlord id so backend can associate the property.
       if (type && type.toLowerCase() === "landlord" && userId) {
         payload.landlord = userId;
+      }
+      // If admin selected a landlord
+      if (user.account_type === "admin" && selectedLandlord) {
+        payload.landlord = selectedLandlord;
       }
 
       if (action === "edit" && propertyId) {
@@ -322,10 +359,8 @@ const DetailsComponent = () => {
       const fd = new FormData();
       fd.append("file", file);
       const result = await uploadDocs(fd);
-      handleInputChange("verification_document", [
-        ...formData.verification_document,
-        result.asset,
-      ]);
+      // Fix: Store as single string, not array. Backend expects string.
+      handleInputChange("verification_document", result.asset);
     } catch (err) {
       console.error("Document upload failed", err);
     } finally {
@@ -341,17 +376,34 @@ const DetailsComponent = () => {
 
       <div className="edit-profile-setup rad">
         <h2>
-          {user.account_type === "landlord"
+          {user.account_type === "landlord" || user.account_type === "admin"
             ? "Add New Property"
             : "Set up Your Profile"}
         </h2>
         <p className="subtitle">
-          {user.account_type !== "landlord"
+          {user.account_type !== "landlord" && user.account_type !== "admin"
             ? "Complete your Profile And find Best Property, kindly fill all the field to find best deals."
             : "Complete your Property details And find Best Tenant, kindly fill all the field to find best deals."}
         </p>
 
-        {user.account_type === "landlord" && (
+        {user.account_type === "admin" && (
+          <InputGroup label="Select Landlord" required>
+            <select
+              className="input"
+              value={selectedLandlord}
+              onChange={(e) => setSelectedLandlord(e.target.value)}
+            >
+              <option value="">Select Landlord</option>
+              {landlords.map((l) => (
+                <option key={l._id} value={l._id}>
+                  {l.name} ({l.email})
+                </option>
+              ))}
+            </select>
+          </InputGroup>
+        )}
+
+        {(user.account_type === "landlord" || user.account_type === "admin") && (
           <>
             <div className="primary-checkbox">
               <label>
@@ -497,7 +549,7 @@ const DetailsComponent = () => {
           />
         </InputGroup>
 
-        {user.account_type === "landlord" && (
+        {(user.account_type === "landlord" || user.account_type === "admin") && (
           <>
             <InputGroup label="Preference" required>
               <CheckboxGroup
@@ -530,7 +582,7 @@ const DetailsComponent = () => {
         )}
 
         <InputGroup label="Rental Budget" required>
-          {user.account_type === "landlord" ? (
+          {user.account_type === "landlord" || user.account_type === "admin" ? (
             <div className="suggestion-checkbox">
               <input
                 className="input"
@@ -627,7 +679,7 @@ const DetailsComponent = () => {
                 handleNestedInputChange("deposit", "min", e.target.value)
               }
             />
-            {user.account_type !== "landlord" && (
+            {user.account_type !== "landlord" && user.account_type !== "admin" && (
               <input
                 className="input"
                 placeholder="Maximum Deposit"
@@ -640,7 +692,7 @@ const DetailsComponent = () => {
           </div>
         </InputGroup>
 
-        {user.account_type === "landlord" && (
+        {(user.account_type === "landlord" || user.account_type === "admin") && (
           <InputGroup label="About The Property" required>
             <textarea
               className="input"

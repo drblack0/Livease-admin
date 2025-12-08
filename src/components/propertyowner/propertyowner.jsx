@@ -18,50 +18,7 @@ function PropertyOwner() {
   const userTypeFromUrl = query.get("userType");
   const isLandlordView = userTypeFromUrl === "landlord" ? true : false;
 
-  const [documents] = useState({
-    property: [1, 2, 3],
-    landlord: [1, 2, 3],
-  });
 
-  const [wallet] = useState({
-    balance: 15000,
-    history: [
-      {
-        date: "14 apr",
-        name: "Rina Vyas",
-        flat: "3BHK Flat",
-        amount: "+25,000/-",
-        avatar: "/assets/3d_avatar_1.png",
-      },
-      {
-        date: "14 apr",
-        name: "Rina Vyas",
-        flat: "3BHK Flat",
-        amount: "+25,000/-",
-        avatar: "/assets/3d_avatar_1.png",
-      },
-    ],
-  });
-
-  const [reviews] = useState([
-    {
-      name: "Manish Sharma",
-      rating: 4.0,
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.",
-      avatar: "/assets/3d_avatar_1.png",
-    },
-    {
-      name: "Manish Sharma",
-      rating: 4.0,
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.",
-      avatar: "/assets/3d_avatar_1.png",
-    },
-  ]);
-
-  const [preferences] = useState({
-    status: "Bachelor",
-    language: "Hindi, Gujrati",
-  });
 
   const [listedProperties, setListedProperties] = useState([]);
   const [propertiesLoading, setPropertiesLoading] = useState(false);
@@ -282,129 +239,47 @@ function PropertyOwner() {
 
       {/* Middle Section */}
       <div className="owner-middle-row">
-        {/* Documents */}
-        <div className="doc-preferences">
-          <div className="owner-card">
-            <h3>Documents</h3>
-            <div className="owner-doc-label">Property Document</div>
-            <div className="owner-doc-list">
-              {documents.property.map((_, idx) => (
-                <div key={idx} className="owner-doc-placeholder"></div>
-              ))}
-            </div>
-            <div className="owner-doc-label">Landlord Document</div>
-            <div className="owner-doc-list">
-              {documents.landlord.map((_, idx) => (
-                <div key={idx} className="owner-doc-placeholder"></div>
-              ))}
-            </div>
-          </div>
-          {/* Preferences */}
-          {/* <div className="owner-preferences-card">
-            <h3>Preferences</h3>
-            <div className="owner-preferences-row">
-              <span>Status</span>
-              <span className="owner-preferences-value">
-                {preferences.status}
-              </span>
-            </div>
-            <div className="owner-preferences-row">
-              <span>Preferred Language</span>
-              <span className="owner-preferences-values">
-                {preferences.language}
-              </span>
-            </div>
-          </div> */}
-        </div>
-        {/* Wallet */}
-        <div className="owner-card">
-          <h3>Wallet</h3>
-          <div className="owner-wallet-balance">
-            <span>Your Available Balance is</span>
-            <div className="owner-wallet-amount rad">
-              <span className="owner-wallet-credits">
-                <img src="/assets/cryptocurrency-color_gold.png"></img>
-                <span> Credits</span>
-              </span>
-              <span className="owner-wallet-value">
-                {wallet.balance.toLocaleString()}
-              </span>
-            </div>
-          </div>
-          <div className="owner-wallet-history-label">Payment History</div>
-          <div className="owner-wallet-history">
-            <span className="owner-wallet-date">14 apr</span>
-            {wallet.history.map((item, idx) => (
-              <div key={idx} className="owner-wallet-history-row">
-                <img
-                  src={item.avatar}
-                  alt="avatar"
-                  className="owner-wallet-avatar"
-                />
-                <span className="name-flat">
-                  <span className="owner-wallet-name">{item.name}</span>
-                  <span className="owner-wallet-flat">{item.flat}</span>
-                </span>
-                <span className="owner-wallet-amount-pos">{item.amount}</span>
+        {/* We removed hardcoded Documents, Wallet, and Reviews sections as per requirements */}
+        {/* If these features are added to the backend in the future, re-implement them here fetching real data */}
+      </div>
+
+      {/* Listed Properties - Only for Landlords */}
+      {isLandlordView && (
+        <div className="owner-listed-properties-card">
+          <h3>Listed Property</h3>
+          <div className="owner-listed-properties-list">
+            {listedProperties.map((prop) => (
+              <div key={prop._id} className="owner-property-card">
+                {prop.property_images[0] ? (
+                  <img
+                    src={prop.property_images[0]}
+                    alt={prop.property_title || "property"}
+                    className="owner-property-img"
+                  />
+                ) : (
+                  <div
+                    className="owner-property-img owner-property-img--placeholder"
+                    aria-hidden="true"
+                  ></div>
+                )}
+                <div className="owner-property-title">{prop.property_title}</div>
+                <div className="owner-property-location">
+                  {prop.address.country}
+                </div>
+                <div className="owner-property-rent">
+                  Rent : {prop.rent_amount.toLocaleString()}/Month
+                </div>
+                <Link
+                  className="owner-property-link"
+                  to={`/property/${prop._id}`}
+                >
+                  <button className="owner-property-btn">View Property</button>
+                </Link>
               </div>
             ))}
           </div>
         </div>
-        {/* Reviews */}
-        <div className="owner-card">
-          <h3>Reviews</h3>
-          {reviews.map((review, idx) => (
-            <div key={idx} className="owner-review">
-              <div className="owner-review-text">{review.text}</div>
-              <div className="owner-review-user">
-                <img
-                  src={review.avatar}
-                  alt="avatar"
-                  className="owner-review-avatar"
-                />
-                <span className="owner-review-name">{review.name}</span>
-                <span className="owner-review-rating">★ {review.rating}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Listed Properties */}
-      <div className="owner-listed-properties-card">
-        <h3>Listed Property</h3>
-        <div className="owner-listed-properties-list">
-          {listedProperties.map((prop) => (
-            <div key={prop._id} className="owner-property-card">
-              {prop.property_images[0] ? (
-                <img
-                  src={prop.property_images[0]}
-                  alt={prop.property_title || "property"}
-                  className="owner-property-img"
-                />
-              ) : (
-                <div
-                  className="owner-property-img owner-property-img--placeholder"
-                  aria-hidden="true"
-                ></div>
-              )}
-              <div className="owner-property-title">{prop.property_title}</div>
-              <div className="owner-property-location">
-                {prop.address.country}
-              </div>
-              <div className="owner-property-rent">
-                Rent : {prop.rent_amount.toLocaleString()}/Month
-              </div>
-              <Link
-                className="owner-property-link"
-                to={`/property/${prop._id}`}
-              >
-                <button className="owner-property-btn">View Property</button>
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

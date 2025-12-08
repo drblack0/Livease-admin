@@ -455,7 +455,12 @@ function MaintenanceService() {
 											<option value="">Select Property</option>
 											{properties.map(prop => (
 												<option key={prop._id} value={prop._id}>
-													{prop.title || prop.address || prop._id}
+													{prop.title ||
+														prop.property_title ||
+														prop.name ||
+														prop.location ||
+														prop.address ||
+														prop._id}
 												</option>
 											))}
 										</select>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getUsersList, getProperties } from "../../server";
+import { getUsersList, getProperties, addUser } from "../../server";
 import "./userManagement.scss";
 import { Link, useNavigate } from "react-router-dom";
+import AddTenantModal from "../comman/AddTenantModal/AddTenantModal";
 
 function UserManagement({ compType }) {
   const [data, setData] = useState([]);
@@ -11,6 +12,9 @@ function UserManagement({ compType }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const recordsPerPage = 10;
+
+  // Add tenant modal state
+  const [showAddTenantModal, setShowAddTenantModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -25,7 +29,7 @@ function UserManagement({ compType }) {
         if (res?.properties) {
           const updatedProperties = res.properties.map((prop) => ({
             ...prop,
-            title: prop.property_title || "N/A",
+            title: prop.title || "N/A",
             name: prop.landlord?.name || "N/A",
             bhk: Array.isArray(prop.bhk_type)
               ? prop.bhk_type.join(", ")
@@ -103,6 +107,11 @@ function UserManagement({ compType }) {
     fetchData(page);
   };
 
+  // Add tenant modal functions
+  const handleOpenAddTenantModal = () => {
+    setShowAddTenantModal(true);
+  };
+
   // Table headers
   const headers =
     compType === "property"
@@ -129,14 +138,16 @@ function UserManagement({ compType }) {
           <p>Manage your task and activities.</p>
         </div>
 
-        {/* New button navigates to /add-property */}
+        {/* New button navigates to /add-property for property/landlord, handles modal for tenant */}
         <button
           className="user-management__new-tenant"
-          onClick={() =>
-            compType === "property"
-              ? navigate("/add-property")
-              : alert(`Create new ${compType}`)
-          }
+          onClick={() => {
+            if (compType === 'tenant') {
+              handleOpenAddTenantModal();
+            } else {
+              navigate(`/add-property?type=${compType}`)
+            }
+          }}
         >
           <img src="/assets/iconplus.png" alt="plus" />
           <span>
@@ -305,6 +316,13 @@ function UserManagement({ compType }) {
           </div>
         )}
       </div>
+
+      {/* Add Tenant Modal */}
+      <AddTenantModal
+        isOpen={showAddTenantModal}
+        onClose={() => setShowAddTenantModal(false)}
+        onSuccess={() => fetchData(currentPage)}
+      />
     </div>
   );
 }

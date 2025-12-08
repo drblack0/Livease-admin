@@ -26,7 +26,10 @@ export const apiRequest = async ({
     });
 
     const result = await response.json();
-    if (!response.ok) throw new Error(result.message || "API request failed");
+    if (!response.ok) {
+      // Throw the specific message from the backend if available
+      throw new Error(result.message || result.error || "API request failed");
+    }
     return result;
   } catch (error) {
     console.error(`API Error [${method} ${endpoint}]`, error);
