@@ -83,6 +83,14 @@ export const addProperty = payload =>
 		requiresAuth: true
 	});
 
+export const saveScrapedProperty = payload =>
+	apiRequest({
+		endpoint: `${BASE_URL}/property/scraped`,
+		data: payload,
+		method: 'POST',
+		requiresAuth: true
+	});
+
 export const getTickets = (page, recordsPerPage) =>
 	apiRequest({
 		endpoint: `${BASE_URL}/admin/getTickets?page=${page}&limit=${recordsPerPage}`,

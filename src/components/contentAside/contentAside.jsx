@@ -56,6 +56,7 @@ const ContentAside = () => {
       link: "support-ticket",
     },
     { id: 7, label: "Analytics", icon: "/assets/Vector.png" },
+    { id: 8, label: "Scraping", icon: "/assets/Vector.png", link: "/scraping" },
   ]);
 
   return (
