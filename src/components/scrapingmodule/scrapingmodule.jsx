@@ -38,7 +38,7 @@ function ScrapingModule() {
     try {
         console.log("Sending scrape request to backend...");
 
-        const response = await fetch('http://localhost:4001/api/v1/scraping/facebook', {
+        const response = await fetch('https://livease-backend.onrender.com/api/v1/scraping/facebook', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
