@@ -3,25 +3,45 @@
   top: 0;
   left: 0;
   width: 211px;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 40px);
   background: #fff;
   border-right: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 15px;
   z-index: 1000; // ensures it stays above other content
   margin: 20px;
 
   .logo {
     text-align: center;
+    flex-shrink: 0; // prevents logo from shrinking
   }
 
   .menu {
     list-style: none;
     padding: 0;
     margin-top: 30px;
-    height: 70%;
+    flex: 1; // takes up available space
+    overflow-y: auto; // makes menu scrollable
+    overflow-x: hidden;
+    
+    // Custom scrollbar styling
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 3px;
+      
+      &:hover {
+        background: #9ca3af;
+      }
+    }
 
     a {
       text-decoration: none;
@@ -61,6 +81,10 @@
     flex-direction: column;
     gap: 15px;
     padding-left: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    margin-top: 15px;
+    flex-shrink: 0; // prevents footer from shrinking
 
     .footer-item {
       display: flex;

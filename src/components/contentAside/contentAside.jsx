@@ -32,31 +32,37 @@ const ContentAside = () => {
       link: "/landlord-management",
     },
     {
-      id: 3,
+      id: 4,
       label: "Property Management",
       icon: "/assets/Vector.png",
       link: "/property-management",
     },
     {
-      id: 4,
+      id: 5,
+      label: "Admin Management",
+      icon: "/assets/Vector.png",
+      link: "/admin-management",
+    },
+    {
+      id: 6,
       label: "Maintenance Requests",
       icon: "/assets/Vector.png",
       link: "/maintenance-service",
     },
     {
-      id: 5,
+      id: 7,
       label: "Payments & Wallet",
       icon: "/assets/Vector.png",
       link: "/wallet",
     },
     {
-      id: 6,
+      id: 8,
       label: "Reports",
       icon: "/assets/Vector.png",
       link: "support-ticket",
     },
-    { id: 7, label: "Analytics", icon: "/assets/Vector.png" },
-    { id: 8, label: "Scraping", icon: "/assets/Vector.png", link: "/scraping" },
+    { id: 9, label: "Analytics", icon: "/assets/Vector.png" },
+    { id: 10, label: "Scraping", icon: "/assets/Vector.png", link: "/scraping" },
   ]);
 
   return (

@@ -4,6 +4,7 @@ import HomePage from "./components/homepage/homepage";
 import Dashboard from "./components/dashboard/dashboard";
 import Profile from "./components/profile/Profile";
 import UserManagement from "./components/userManagement/userManagement";
+import AdminManagement from "./components/adminManagement/adminManagement";
 import Flat from "./components/flat/flat";
 import PropertyOwner from "./components/propertyowner/propertyowner";
 import UploadProperty from "./components/uploadproperty/uploadproperty";
@@ -61,6 +62,7 @@ function App() {
             path="property-management"
             element={<UserManagement compType={"property"} />}
           />
+          <Route path="admin-management" element={<AdminManagement />} />
           <Route path="property/:id" element={<Flat />} />
           <Route path="profile/:id" element={<PropertyOwner />} />
           <Route path="add-property" element={<DetailsComponent />} />
