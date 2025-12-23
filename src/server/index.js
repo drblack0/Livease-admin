@@ -279,3 +279,26 @@ export const rejectPropertyCheckup = (checkupId, data) =>
 		data,
 		requiresAuth: true
 	});
+
+// Admin Management APIs
+export const getAdminUsers = (page, recordsPerPage) =>
+	apiRequest({
+		endpoint: `${BASE_URL}/admin/getAdminUsers?page=${page}&limit=${recordsPerPage}`,
+		method: 'GET',
+		requiresAuth: true
+	});
+
+export const addAdminUser = data =>
+	apiRequest({
+		endpoint: `${BASE_URL}/admin/addAdminUser`,
+		method: 'POST',
+		data,
+		requiresAuth: true
+	});
+
+export const deleteAdminUser = adminId =>
+	apiRequest({
+		endpoint: `${BASE_URL}/admin/deleteAdminUser/${adminId}`,
+		method: 'DELETE',
+		requiresAuth: true
+	});
