@@ -15,6 +15,13 @@
   .logo {
     text-align: center;
     flex-shrink: 0; // prevents logo from shrinking
+
+    .sidebar-logo {
+      max-width: 160px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
   }
 
   .menu {

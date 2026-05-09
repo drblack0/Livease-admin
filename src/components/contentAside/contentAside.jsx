@@ -70,8 +70,9 @@ const ContentAside = () => {
       {/* Logo */}
       <div className="logo">
         <img
-          src="/assets/Frame 322.png" // dummy logo, replace later
-          alt="logo"
+          src="/zeqlo-logo-light.png"
+          alt="Zeqlo"
+          className="sidebar-logo"
         />
       </div>
 

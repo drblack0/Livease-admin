@@ -36,7 +36,7 @@ export const getCurrentUser = () => {
   
   return {
     name: decoded.user_name || 'Admin',
-    email: email || 'admin@livease.com',
+    email: email || 'admin@zeqlo.com',
     userId: decoded.user_id,
     profilePic: decoded.profile_pic,
     accountType: decoded.account_type

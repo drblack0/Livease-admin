@@ -1,6 +1,9 @@
 import { apiRequest } from '../util/helper/apiHelper';
-export const BASE_URL = 'https://livease-backend-825a.onrender.com/api/v1';
-// export const BASE_URL = 'http://localhost:4001/api/v1';
+const isLocalhost =
+	typeof window !== 'undefined' &&
+	(window.location.hostname === 'localhost' ||
+		window.location.hostname === '127.0.0.1');
+export const BASE_URL = 'https://livease-monorepo.onrender.com/api/v1';
 export const signIn = data =>
 	apiRequest({
 		endpoint: `${BASE_URL}/admin/signInPassword`,

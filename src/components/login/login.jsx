@@ -57,11 +57,11 @@ const Login = () => {
     <div className="login-container">
       <div className="login-card">
         <img
-          src={"/assets/Frame 322.png"}
-          alt="Livease Logo"
+          src="/zeqlo-logo-light.png"
+          alt="Zeqlo"
           className="login-logo"
         />
-        <p className="login-subtitle">Login to proceed</p>
+        <p className="login-subtitle">Zeqlo Admin · Login to proceed</p>
 
         <form onSubmit={handleSubmit}>
           <input

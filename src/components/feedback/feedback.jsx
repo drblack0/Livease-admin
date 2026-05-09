@@ -60,7 +60,7 @@ function Feedback() {
         </div>
         <div className="feedback-side-card">
           <div className="feedback-side-title">
-            LivEase Notes
+            Zeqlo Notes
             <button className="add-notes-btn">Add Notes</button>
           </div>
           <div className="feedback-side-content">Property in good condition</div>

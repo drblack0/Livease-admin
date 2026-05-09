@@ -5,7 +5,7 @@ import { getCurrentUser } from "../../util/helper/authHelper";
 function Header() {
   const [userInfo, setUserInfo] = useState({
     name: "Admin",
-    email: "admin@livease.com",
+    email: "admin@zeqlo.com",
     profilePic: "/assets/3d_avatar_12.png"
   });
 
