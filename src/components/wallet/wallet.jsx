@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getWallets, getTransactionLogs } from '../../server/index';
+import Pagination from '../comman/Pagination/Pagination';
 import './wallet.scss';
 
 function Wallet() {
@@ -298,28 +299,12 @@ function Wallet() {
 								))}
 							</tbody>
 						</table>
-						<div className="wallet-pagination">
-							<span>
-								Page {currentPage} of {totalPages}
-							</span>
-							<span
-								className="wallet-next"
-								onClick={() => handlePageChange(currentPage + 1)}
-								style={{
-									cursor: currentPage < totalPages ? 'pointer' : 'not-allowed',
-									opacity: currentPage < totalPages ? 1 : 0.5
-								}}>
-								Next &gt;
-							</span>
-							{currentPage > 1 && (
-								<span
-									className="wallet-prev"
-									onClick={() => handlePageChange(currentPage - 1)}
-									style={{ cursor: 'pointer', marginRight: '10px' }}>
-									&lt; Prev
-								</span>
-							)}
-						</div>
+						<Pagination
+							className="wallet-pagination"
+							currentPage={currentPage}
+							totalPages={totalPages}
+							onPageChange={handlePageChange}
+						/>
 					</>
 				)}
 			</div>

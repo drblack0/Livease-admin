@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getTickets } from "../../server";
+import Pagination from "../comman/Pagination/Pagination";
 import "./supportTicket.scss";
 
 function SupportTicket() {
@@ -171,24 +172,12 @@ function SupportTicket() {
           </tbody>
         </table>
 
-        {/* Pagination */}
-        <div className="support-ticket-pagination">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            &lt; Prev
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next &gt;
-          </button>
-        </div>
+        <Pagination
+          className="support-ticket-pagination"
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
 
       {/* Edit Modal */}

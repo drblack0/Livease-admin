@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPropertyCheckups, approvePropertyCheckup, rejectPropertyCheckup } from "../../server";
+import Pagination from "../comman/Pagination/Pagination";
 import "./PropertyCheckUps.scss";
 
 function PropertyCheckUps() {
@@ -241,26 +242,12 @@ return (
         </tbody>
       </table>
 
-      {/* Pagination */}
-      <div className="checkups__footer">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="btn btn--secondary"
-        >
-          &lt; Prev
-        </button>
-        <span>
-          Page {currentPage} of {totalFilteredPages || 1}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalFilteredPages}
-          className="btn btn--secondary"
-        >
-          Next &gt;
-        </button>
-      </div>
+      <Pagination
+        className="checkups__footer"
+        currentPage={currentPage}
+        totalPages={totalFilteredPages || 1}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

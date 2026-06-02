@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAdminUsers, addAdminUser, deleteAdminUser } from '../../server';
+import Pagination from '../comman/Pagination/Pagination';
 import './adminManagement.scss';
 
 function AdminManagement() {
@@ -202,23 +203,13 @@ function AdminManagement() {
 					</tbody>
 				</table>
 
-				{/* Pagination */}
 				{!loading && filteredAdmins.length > 0 && (
-					<div className="admin-management__pagination">
-						<button
-							onClick={() => handlePageChange(currentPage - 1)}
-							disabled={currentPage === 1}>
-							&lt; Prev
-						</button>
-						<span>
-							Page {currentPage} of {totalPages}
-						</span>
-						<button
-							onClick={() => handlePageChange(currentPage + 1)}
-							disabled={currentPage === totalPages}>
-							Next &gt;
-						</button>
-					</div>
+					<Pagination
+						className="admin-management__pagination"
+						currentPage={currentPage}
+						totalPages={totalPages}
+						onPageChange={handlePageChange}
+					/>
 				)}
 			</div>
 

@@ -1,0 +1,80 @@
+.pagination {
+	padding: 10px 18px 0 18px;
+	font-size: 15px;
+	color: #555;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+
+	&__nav {
+		background: #fff;
+		border: 1px solid #ddd;
+		border-radius: 7px;
+		padding: 8px 16px;
+		font-size: 15px;
+		cursor: pointer;
+		color: #2473c2;
+		font-weight: 500;
+		white-space: nowrap;
+
+		&:hover:not(:disabled) {
+			background: #f5f9fd;
+			border-color: #2473c2;
+		}
+
+		&:disabled {
+			color: #ccc;
+			cursor: not-allowed;
+			background: #fafafa;
+		}
+	}
+
+	&__pages {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		flex: 1;
+		flex-wrap: wrap;
+	}
+
+	&__page {
+		min-width: 36px;
+		height: 36px;
+		padding: 0 8px;
+		background: #fff;
+		border: 1px solid #ddd;
+		border-radius: 7px;
+		font-size: 14px;
+		color: #555;
+		cursor: pointer;
+		transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+		&:hover:not(:disabled) {
+			border-color: #2473c2;
+			color: #2473c2;
+			background: #f5f9fd;
+		}
+
+		&--active {
+			background: #2473c2;
+			border-color: #2473c2;
+			color: #fff;
+			font-weight: 600;
+			cursor: default;
+		}
+
+		&:disabled:not(.pagination__page--active) {
+			cursor: default;
+		}
+	}
+
+	&__ellipsis {
+		min-width: 24px;
+		text-align: center;
+		color: #999;
+		user-select: none;
+	}
+}

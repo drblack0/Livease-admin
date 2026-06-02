@@ -7,6 +7,7 @@ import {
 	getUsersList,
 	getProperties
 } from '../../server';
+import Pagination from '../comman/Pagination/Pagination';
 function MaintenanceService() {
 	const navigate = useNavigate();
 	const [requests, setRequests] = useState([]);
@@ -374,21 +375,12 @@ function MaintenanceService() {
 						)}
 					</tbody>
 				</table>
-				<div className="maintenance-service-pagination">
-					<button
-						onClick={() => handlePageChange(currentPage - 1)}
-						disabled={currentPage === 1}>
-						&lt; Prev
-					</button>
-					<span>
-						Page {currentPage} of {totalPages}
-					</span>
-					<button
-						onClick={() => handlePageChange(currentPage + 1)}
-						disabled={currentPage === totalPages}>
-						Next &gt;
-					</button>
-				</div>
+				<Pagination
+					className="maintenance-service-pagination"
+					currentPage={currentPage}
+					totalPages={totalPages}
+					onPageChange={handlePageChange}
+				/>
 			</div>
 
 			{/* Create Request Modal */}

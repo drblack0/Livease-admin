@@ -3,6 +3,7 @@ import { getUsersList, getProperties, addUser } from "../../server";
 import "./userManagement.scss";
 import { Link, useNavigate } from "react-router-dom";
 import AddTenantModal from "../comman/AddTenantModal/AddTenantModal";
+import Pagination from "../comman/Pagination/Pagination";
 
 function UserManagement({ compType }) {
   const [data, setData] = useState([]);
@@ -295,25 +296,13 @@ function UserManagement({ compType }) {
           </tbody>
         </table>
 
-        {/* Pagination */}
         {!loading && filteredData.length > 0 && (
-          <div className="user-management__pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt; Prev
-            </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next &gt;
-            </button>
-          </div>
+          <Pagination
+            className="user-management__pagination"
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         )}
       </div>
 
