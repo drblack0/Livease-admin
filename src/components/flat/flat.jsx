@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPropertyByID, updatePropertyStatus } from "../../server"; // getLandlordByID for landlord info
+import { getPropertyByID, updatePropertyStatus, deleteProperty } from "../../server"; // getLandlordByID for landlord info
 import "./flat.scss";
 
 function Flat() {
@@ -85,10 +85,11 @@ function Flat() {
     if (!confirmed) return;
     try {
       setActionInProgress(true);
-      await updatePropertyStatus({ is_deleted: true }, id);
+      // Hard delete: permanently remove the property (and related records) on the backend
+      await deleteProperty(id);
       alert("Property deleted");
-      const refreshed = await getPropertyByID(id);
-      if (refreshed) setProperty(refreshed);
+      // Record no longer exists; leave the detail page
+      navigate(-1);
     } catch (err) {
       console.error("Failed to delete property", err);
       alert("Failed to delete property. Please try again.");

@@ -305,3 +305,17 @@ export const deleteAdminUser = adminId =>
 		method: 'DELETE',
 		requiresAuth: true
 	});
+
+export const deleteUser = userId =>
+	apiRequest({
+		endpoint: `${BASE_URL}/admin/deleteUser/${userId}`,
+		method: 'DELETE',
+		requiresAuth: true
+	});
+
+export const deleteProperty = propertyId =>
+	apiRequest({
+		endpoint: `${BASE_URL}/admin/deleteProperty/${propertyId}`,
+		method: 'DELETE',
+		requiresAuth: true
+	});

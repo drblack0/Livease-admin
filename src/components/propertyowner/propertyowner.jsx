@@ -4,6 +4,7 @@ import {
   getProfileDetails,
   getPropertyByUserID,
   updateUserStatus,
+  deleteUser,
 } from "../../server";
 import { Link, useParams, useLocation } from "react-router-dom";
 
@@ -110,24 +111,28 @@ function PropertyOwner() {
     );
     if (!confirmed) return;
 
-    // Map label to API payload
-    let payloadForUser = null;
     const label = actionLabel.toLowerCase();
-    if (label.includes("delete")) {
-      payloadForUser = { is_deleted: true };
-    } else if (label.includes("suspend") || label.includes("suspended")) {
-      payloadForUser = { status: "suspended" };
-    } else if (label.includes("approve") || label.includes("approved")) {
-      payloadForUser = { status: "approved" };
-    } else if (label.includes("reject") || label.includes("rejected")) {
-      payloadForUser = { status: "rejected" };
-    } else {
-      payloadForUser = { status: label };
-    }
 
     try {
       setActionInProgress(true);
-      await updateUserStatus(payloadForUser, id);
+
+      if (label.includes("delete")) {
+        // Hard delete: permanently remove the user (and related records) on the backend
+        await deleteUser(id);
+      } else {
+        // Status changes are non-destructive PUT updates
+        let payloadForUser;
+        if (label.includes("suspend") || label.includes("suspended")) {
+          payloadForUser = { status: "suspended" };
+        } else if (label.includes("approve") || label.includes("approved")) {
+          payloadForUser = { status: "approved" };
+        } else if (label.includes("reject") || label.includes("rejected")) {
+          payloadForUser = { status: "rejected" };
+        } else {
+          payloadForUser = { status: label };
+        }
+        await updateUserStatus(payloadForUser, id);
+      }
 
       alert(`${actionLabel} action applied`);
     } catch (err) {
